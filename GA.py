@@ -524,7 +524,7 @@ def GA(objf, lb, ub, dim, popSize, iters,_mp,crossovertype,selectionMethod):
         if l % 1 == 0:
             print(
                 [
-                    "At iteration "
+                    "GA : At iteration "
                     + str(l + 1)
                     + " the best fitness is "
                     + str(bestScore)

@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="col-12">
                             <select class="form-select" name="algorithm1" id="algorithm1" onchange="changeAlgorithm(this,1)">
-                                <option selected disabled>Select an algorithm</option>
+                                <option value="none" selected disabled>Select an algorithm</option>
                                 <option value="GA">GA</option>
                                 <option value="SA">SA</option>
                                 <option value="HC">HC</option>
@@ -33,7 +33,7 @@
                 <div class="row">
                     <div class="col-12">
                         <select class="form-select" name="algorithm2" onchange="changeAlgorithm(this,2)">
-                            <option selected disabled>Select an algorithm</option>
+                            <option value="none" selected disabled>Select an algorithm</option>
                             <option value="GA">GA</option>
                             <option value="SA">SA</option>
                             <option value="HC">HC</option>
@@ -49,7 +49,7 @@
                     <div class="row">
                         <div class="col-12">
                             <select class="form-select" name="algorithm3" onchange="changeAlgorithm(this,3)">
-                                <option selected disabled>Select an algorithm</option>
+                                <option value="none" selected disabled>Select an algorithm</option>
                                 <option value="GA">GA</option>
                                 <option value="SA">SA</option>
                                 <option value="HC">HC</option>
@@ -73,6 +73,47 @@
 
 
 <script>
+    var gennum=100;
+    function apendInputs(){
+        var inputArray = document.getElementsByClassName("gennum")
+        for(let item of inputArray){
+            item.value=gennum;
+            item.addEventListener('input',()=>{
+                gennum = item.value;
+                for(let item2 of inputArray){
+                    item2.value=gennum;
+                }
+            })
+        }
+    }
+    
+    function changeBounds(event,number){
+        var bound = getBounds(event.value);
+        document.querySelector('input[name="lb'+number+'"]').value = bound[0]
+        document.querySelector('input[name="ub'+number+'"]').value = bound[1]
+    }
+
+    function getBounds(number){
+        if(number==0)
+            return [-32768,32768]
+        else if(number==2)
+            return [-600,600]
+        else if(number==9)
+            return [-500,500]
+        else if(number==7 || number==10)
+            return [-5.12,5.12]
+        else if(number==13)
+            return [-5,10]
+        else if(number==8)
+            return [-2048,2048]
+        else if(number==4)
+            return [-30,30]
+        else if(number==18)
+         return [-65536,65536]
+        else if(number==19)
+            return [0,14]
+    }
+
     function changeAlgorithm(event,number){
         if(event.value=="GA"){
             document.querySelector('#algorithmContainer'+number).innerHTML = getGATemplate(number);
@@ -83,16 +124,32 @@
         else if(event.value=="GWO"){
             document.querySelector('#algorithmContainer'+number).innerHTML = getGWOTemplate(number);
         }
+        else if(event.value=="HC"){
+            document.querySelector('#algorithmContainer'+number).innerHTML = getHCTemplate(number);
+        }
+        else if(event.value=="HS"){
+            document.querySelector('#algorithmContainer'+number).innerHTML = getHSTemplate(number);
+        }
+        apendInputs();
     }
+
+
     function getGATemplate(number){
         let template =
         '<div class="row">\
             <div class="col">\
                 <label for="function">Function:</label>\
-                <select class="form-select" name="function'+number+'">\
+                <select class="form-select" onchange="changeBounds(this,'+number+')"  name="function'+number+'">\
                     <option value="0">Ackley</option>\
                     <option value="2">Greiwank</option>\
                     <option value="9">Schwefel</option>\
+                    <option value="7">Rastrigin</option>\
+                    <option value="10">Sphere</option>\
+                    <option value="13">Zakharov</option>\
+                    <option value="8">Rosenbrock</option>\
+                    <option value="4">Perm</option>\
+                    <option value="18">Rotated Hyper Ellipsoid</option>\
+                    <option value="19">Damavandi</option>\
                     </select>\
             </div>\
         </div>\
@@ -113,7 +170,7 @@
             </div>\
             <div class="col"> \
                 <label for="lastname">Generation Number:</label>\
-                <input class="form-control" type="number"  name="gennum" value="100">\
+                <input class="form-control gennum" type="number"  name="gennum" value="100">\
             </div>\
         </div>\
         <div class="row">\
@@ -151,10 +208,17 @@
         '<div class="row">\
             <div class="col">\
                 <label for="function2">Function:</label>\
-                <select class="form-select" name="function'+number+'">\
+                <select class="form-select" onchange="changeBounds(this,'+number+')"  name="function'+number+'">\
                     <option value="0">Ackley</option>\
                     <option value="2">Greiwank</option>\
-                    <option value="9">Schwefel</option>  \
+                    <option value="9">Schwefel</option>\
+                    <option value="7">Rastrigin</option>\
+                    <option value="10">Sphere</option>\
+                    <option value="13">Zakharov</option>\
+                    <option value="8">Rosenbrock</option>\
+                    <option value="4">Perm</option>\
+                    <option value="18">Rotated Hyper Ellipsoid</option>\
+                    <option value="19">Damavandi</option>\
                     </select>\
             </div>\
         </div>\
@@ -184,7 +248,7 @@
         <div class="row">\
             <div class="col">\
                 <label for="popsize">Max Iteration:</label>\
-                <input class="form-control" type="number"  name="maxIter" value="100">\
+                <input class="form-control gennum" type="number"  name="maxIter" value="100">\
             </div>\
         </div>\
     </div>\
@@ -196,10 +260,17 @@
         '<div class="row">\
             <div class="col">\
                 <label>Function:</label>\
-                <select class="form-select" name="function'+number+'">\
+                <select class="form-select" onchange="changeBounds(this,'+number+')"  name="function'+number+'">\
                     <option value="0">Ackley</option>\
                     <option value="2">Greiwank</option>\
-                    <option value="9">Schwefel</option>  \
+                    <option value="9">Schwefel</option>\
+                    <option value="7">Rastrigin</option>\
+                    <option value="10">Sphere</option>\
+                    <option value="13">Zakharov</option>\
+                    <option value="8">Rosenbrock</option>\
+                    <option value="4">Perm</option>\
+                    <option value="18">Rotated Hyper Ellipsoid</option>\
+                    <option value="19">Damavandi</option>\
                     </select>\
             </div>\
         </div>\
@@ -215,18 +286,22 @@
         </div>\
         <div class="row">\
             <div class="col">\
-                <label for="popsize">Population Size:</label>\
+                <label for="popsize2">Population Size:</label>\
                 <input class="form-control" type="number"  name="popsize2" value="100">\
             </div>\
             <div class="col"> \
-                <label for="lastname">Generation Number:</label>\
-                <input class="form-control" type="number"  name="gennum2" value="100">\
+                <label for="gennum2">Generation Number:</label>\
+                <input class="form-control gennum" type="number"  name="gennum2" value="100">\
             </div>\
         </div>\
         <div class="row">\
             <div class="col">\
-                <label for="popsize">Decrease From:</label>\
+                <label for="decreaseFrom">Decrease From:</label>\
                 <input class="form-control" type="number"  name="decreaseFrom" value="4">\
+            </div>\
+            <div class="col">\
+                <label for="dim2">Dimension:</label>\
+                <input class="form-control" type="number"  name="dim2" value="30">\
             </div>\
         </div>\
     </div>\
@@ -234,4 +309,124 @@
         return template;
     }
 
+    function getHCTemplate(number){
+        let template = 
+        '<div class="row">\
+            <div class="col">\
+                <label>Function:</label>\
+                <select class="form-select" onchange="changeBounds(this,'+number+')"  name="function'+number+'">\
+                    <option value="0">Ackley</option>\
+                    <option value="2">Greiwank</option>\
+                    <option value="9">Schwefel</option>\
+                    <option value="7">Rastrigin</option>\
+                    <option value="10">Sphere</option>\
+                    <option value="13">Zakharov</option>\
+                    <option value="8">Rosenbrock</option>\
+                    <option value="4">Perm</option>\
+                    <option value="18">Rotated Hyper Ellipsoid</option>\
+                    <option value="19">Damavandi</option>\
+                    </select>\
+            </div>\
+        </div>\
+        <div class="row">\
+            <div class="col">\
+                <label for="lb2">Lower Bound:</label>\
+                <input class="form-control" type="number"  name="lb'+number+'" value="-32768">\
+            </div>\
+            <div class="col">\
+                <label for="ub2">Upper Bound:</label>\
+                <input class="form-control" type="number"  name="ub'+number+'" value="32768">\
+            </div>\
+        </div>\
+        <div class="row">\
+            <div class="col">\
+                <label for="popsize">Dimension:</label>\
+                <input class="form-control" type="number"  name="dim3" value="30">\
+            </div>\
+            <div class="col"> \
+                <label for="lastname">Generation Number:</label>\
+                <input class="form-control gennum" type="number"  name="gennum3" value="100">\
+            </div>\
+        </div>\
+        <div class="row">\
+            <div class="col">\
+                <label for="popsize">Step Size:</label>\
+                <input class="form-control" type="number"  name="stepsize" value="0.1">\
+            </div>\
+        </div>\
+    </div>\
+        '
+        return template;
+    }
+
+
+    function getHSTemplate(number){
+        let template = 
+        '<div class="row">\
+            <div class="col">\
+                <label>Function:</label>\
+                <select class="form-select" onchange="changeBounds(this,'+number+')"  name="function'+number+'">\
+                    <option value="0">Ackley</option>\
+                    <option value="2">Greiwank</option>\
+                    <option value="9">Schwefel</option>\
+                    <option value="7">Rastrigin</option>\
+                    <option value="10">Sphere</option>\
+                    <option value="13">Zakharov</option>\
+                    <option value="8">Rosenbrock</option>\
+                    <option value="4">Perm</option>\
+                    <option value="18">Rotated Hyper Ellipsoid</option>\
+                    <option value="19">Damavandi</option>\
+                    </select>\
+            </div>\
+        </div>\
+        <div class="row">\
+            <div class="col">\
+                <label for="lb2">Lower Bound:</label>\
+                <input class="form-control" type="number"  name="lb'+number+'" value="-32768">\
+            </div>\
+            <div class="col">\
+                <label for="ub2">Upper Bound:</label>\
+                <input class="form-control" type="number"  name="ub'+number+'" value="32768">\
+            </div>\
+        </div>\
+        <div class="row">\
+            <div class="col">\
+                <label for="hms">Harmony Memory Size:</label>\
+                <input class="form-control" type="number"  name="hms" value="100">\
+            </div>\
+            <div class="col"> \
+                <label for="hmcr">HMCR:</label>\
+                <input class="form-control" type="number"  name="hmcr" value="0.95">\
+            </div>\
+        </div>\
+        <div class="row">\
+            <div class="col">\
+                <label for="par">PAR:</label>\
+                <input class="form-control" type="number"  name="par" value="0.1">\
+            </div>\
+            <div class="col">\
+                <label for="bw">BW:</label>\
+                <input class="form-control" type="number"  name="bw" value="0.1">\
+            </div>\
+        </div>\
+        <div class="row">\
+            <div class="col">\
+                <label for="dim4">Number of Process:</label>\
+                <input class="form-control" type="number"  name="numproc" value="1">\
+            </div>\
+            <div class="col">\
+                <label for="dim4">Number of Iterations:</label>\
+                <input class="form-control gennum" type="number"  name="numiter" value="100">\
+            </div>\
+        </div>\
+        <div class="row">\
+            <div class="col">\
+                <label for="dim4">Dimension:</label>\
+                <input class="form-control" type="number"  name="dim4" value="30">\
+            </div>\
+        </div>\
+    </div>\
+        '
+        return template;
+    }
 </script>

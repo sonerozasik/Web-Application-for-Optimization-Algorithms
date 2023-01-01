@@ -36,7 +36,7 @@ terminating = Event()
 # namedtuples are lightweight and trivial to extend should more results be desired in the future. Right now, we're just
 # keeping track of the total elapsed clock time, the best harmony found, the fitness for that harmony, and the harmony memory,
 # which allows you to see the top harmonies.
-HarmonySearchResults = namedtuple('HarmonySearchResults', ['elapsed_time', 'best_harmony', 'best_fitness', 'harmony_memories', 'harmony_histories'])
+HarmonySearchResults = namedtuple('HarmonySearchResults', ['elapsed_time', 'best_harmony', 'best_fitness', 'harmony_memories', 'harmony_histories','results'])
 
 
 def harmony_search(objective_function, num_processes, num_iterations, initial_harmonies=None):
@@ -45,6 +45,7 @@ def harmony_search(objective_function, num_processes, num_iterations, initial_ha
         multiple runs can find different results. We run the specified number of iterations on the specified number of processes and return
         an instance of HarmonySearchResults.
     """
+    results=[]
     pool = Pool(num_processes)
     try:
         start = datetime.now()
@@ -66,9 +67,11 @@ def harmony_search(objective_function, num_processes, num_iterations, initial_ha
                 best_fitness = fitness
             harmony_memories.append(harmony_memory)
             harmony_histories.append(harmony_history)
+            results.append(best_fitness)
+            print(best_fitness)
 
         return HarmonySearchResults(elapsed_time=elapsed_time, best_harmony=best_harmony, best_fitness=best_fitness,\
-                                    harmony_memories=harmony_memories, harmony_histories=harmony_histories)
+                                    harmony_memories=harmony_memories, harmony_histories=harmony_histories,results=results)
     except KeyboardInterrupt:
         pool.terminate()
         raise

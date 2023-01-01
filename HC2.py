@@ -4,6 +4,7 @@ from numpy import asarray
 from numpy.random import randn
 from numpy.random import rand
 from numpy.random import seed
+import numpy
 import functions
 
 # objective function
@@ -17,6 +18,7 @@ def hillclimbing(objective, bounds, n_iterations, step_size):
 	# evaluate the initial point
 	solution_eval = objective(solution)
 	# run the hill climb
+	result = []
 	for i in range(n_iterations):
 		# take a step
 		candidate = solution + randn(len(bounds)) * step_size
@@ -27,6 +29,7 @@ def hillclimbing(objective, bounds, n_iterations, step_size):
 			# store the new point
 			solution, solution_eval = candidate, candidte_eval
 			# report progress
-			#print('>%d f(%s) = %.5f' % (i, solution, solution_eval))
-	return [solution, solution_eval]
+			print('>%d f(%s) = %.5f' % (i, solution, solution_eval))
+		result.append(solution_eval)
+	return result
  

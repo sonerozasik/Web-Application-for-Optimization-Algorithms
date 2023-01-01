@@ -31,16 +31,16 @@ def gwo(function,popSize,numOfGen,a_):
     # dim array size, -5 lb +5 lb 
     return GWO(obj_func, getBounds(function)[0], getBounds(function)[1], 30, popSize, numOfGen,a_)
 
-def HillClimbing(function,numOfGen):
-    seed(5)
+def HillClimbing(function,lb,ub,dim,numOfGen,stepsize):
+    #seed(5)
     # define range for input
-    bounds = asarray([[getBounds(function)[0],getBounds(function)[1]]*30])
+    bounds = asarray([[lb,ub]*int(dim)])
     # define the maximum step size
     step_size = 0.1
     # perform the hill climbing search
     obj_func = functions.selectFunction(function)
-    best, score = hillclimbing(obj_func, bounds, numOfGen, step_size)
-    return best, score
+
+    return hillclimbing(obj_func, bounds, numOfGen, stepsize)
 
 class ObjectiveFunction(ObjectiveFunctionInterface):
 
@@ -73,10 +73,10 @@ class ObjectiveFunction(ObjectiveFunctionInterface):
         self._mpai = 2  # maximum pitch adjustment index (also defined in pitch_adjustment()) - used for discrete variables only
         self.function =0
 
-    def run(self,lowerBound,upperBound,hms,hmcr,par,bw):
-        self._lower_bounds = [lowerBound]*30
-        self._upper_bounds = [upperBound]*30
-        self._variable = [True]*30
+    def run(self,lowerBound,upperBound,hms,hmcr,par,bw,dim):
+        self._lower_bounds = [lowerBound]*dim
+        self._upper_bounds = [upperBound]*dim
+        self._variable = [True]*dim
 
         # define all input parameters
         self._maximize = False  # do we maximize or minimize?
@@ -148,11 +148,11 @@ class ObjectiveFunction(ObjectiveFunctionInterface):
     def changeFunction(self,func):
         self.function=func
 
-def HarmonySearch(function,hms,hmcr,par,bw):
+def HarmonySearch(function,lb,ub,hms,hmcr,par,bw,dim,numproc,numiter):
     obj_fun = ObjectiveFunction()
     obj_fun.changeFunction(function)
-    obj_fun.run(getBounds(function)[0],getBounds(function)[1],hms,hmcr,par,bw)
-    sol = harmony_search(obj_fun,1,1)
+    obj_fun.run(lb,ub,hms,hmcr,par,bw,dim)
+    sol = harmony_search(obj_fun,numproc,numiter)
     return sol
 
 def getBounds(function):

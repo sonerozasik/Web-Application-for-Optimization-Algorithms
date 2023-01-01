@@ -9,9 +9,11 @@ import numpy
 import math
 from solution import solution
 import time
+import functions as functions
 
 
 def GWO(objf, lb, ub, dim, SearchAgents_no, Max_iter, a_):
+    objf = functions.selectFunction(objf)
 
     # Max_iter=1000
     # lb=-100
@@ -130,13 +132,12 @@ def GWO(objf, lb, ub, dim, SearchAgents_no, Max_iter, a_):
 
         Convergence_curve[l] = Alpha_score
 
-        if l % 1 ==1:
+        if l % 1 ==0:
             print(
-                ["At iteration " + str(l) + " the best fitness is " + str(Alpha_score)]
+                ["GWO : At iteration " + str(l+1) + " the best fitness is " + str(Alpha_score)]
             )
-            print(
-                Alpha_pos
-            )
+            s.result.append(Alpha_score)
+        
 
     timerEnd = time.time()
     s.endTime = time.strftime("%Y-%m-%d-%H-%M-%S")

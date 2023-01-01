@@ -75,7 +75,7 @@ def simulated_annealing(min_values = [-5,-5], max_values = [5,5], mu = 0, sigma 
         delta     = (fx_new - fx_old)
         r         = int.from_bytes(os.urandom(8), byteorder = "big") / ((1 << 64) - 1)
         p         = np.exp(-delta/Temperature)
-        print(str(i)+" : " + str(round(best[0, -1], 4)))
+        print(["SA : At iteration "+str(i+1)+" the best fitness is " + str(round(best[0, -1], 4))])
         i= i+1
         s.append(round(best[0, -1], 4))
         if (delta < 0 or r <= p):
